@@ -4,9 +4,14 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 
-class Switcher extends StatelessWidget {
+class Switcher extends StatefulWidget {
   const Switcher({super.key});
 
+  @override
+  State<Switcher> createState() => _SwitcherState();
+}
+
+class _SwitcherState extends State<Switcher> {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder(

@@ -6,14 +6,14 @@ import 'package:firebasetest1/squaretile.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class LoginPage extends StatefulWidget {
-  const LoginPage({super.key});
+class SignUp extends StatefulWidget {
+  const SignUp({super.key});
 
   @override
-  State<LoginPage> createState() => _LoginPageState();
+  State<SignUp> createState() => _SignUpState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class _SignUpState extends State<SignUp> {
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
 
@@ -28,34 +28,9 @@ class _LoginPageState extends State<LoginPage> {
       },
     );
 
-    //signin
-    try {
-      await FirebaseAuth.instance.signInWithEmailAndPassword(
-          email: emailController.text, password: passwordController.text);
-      Navigator.pop(context);
-    } on FirebaseAuthException catch (e) {
-      Navigator.pop(context);
-
-      if (e.code == 'user-not-found') {
-        showDialog(
-          context: context,
-          builder: (context) {
-            return AlertDialog(
-              title: Text('Wrong Email'),
-            );
-          },
-        );
-      } else if (e.code == 'wrong-password') {
-        showDialog(
-          context: context,
-          builder: (context) {
-            return AlertDialog(
-              title: Text('Wrong Password'),
-            );
-          },
-        );
-      }
-    }
+    await FirebaseAuth.instance.createUserWithEmailAndPassword(
+        email: emailController.text, password: passwordController.text);
+    Navigator.pop(context);
   }
 
   @override
@@ -86,11 +61,11 @@ class _LoginPageState extends State<LoginPage> {
               ),
               //welcome back
               Text(
-                'Welcome back, you\'ve been missed!',
+                'Let\'s create your account.',
                 style: TextStyle(fontSize: 20),
               ),
               SizedBox(
-                height: 50,
+                height: 20,
               ),
 
               //text field 1
@@ -147,9 +122,9 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                     child: Padding(
                       padding: const EdgeInsets.symmetric(
-                          horizontal: 120.0, vertical: 18),
+                          horizontal: 100.0, vertical: 18),
                       child: Text(
-                        'Sign In',
+                        'Create account',
                         style: TextStyle(
                             color: Colors.white,
                             fontSize: 15,
@@ -167,18 +142,11 @@ class _LoginPageState extends State<LoginPage> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 // ignore: prefer_const_literals_to_create_immutables
                 children: [
-                  Text('Not a member? ',
+                  Text('Already have an account? ',
                       style: TextStyle(fontWeight: FontWeight.bold)),
                   GestureDetector(
-                    onTap: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => SignUp(),
-                          ));
-                    },
                     child: Text(
-                      'Register now',
+                      'Sign In',
                       style: TextStyle(
                           color: Colors.deepPurple,
                           fontWeight: FontWeight.bold),
