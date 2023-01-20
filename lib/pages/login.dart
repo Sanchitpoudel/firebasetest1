@@ -1,19 +1,22 @@
 // ignore_for_file: prefer_const_constructors, use_build_context_synchronously
 
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebasetest1/signUp.dart';
+import 'package:firebasetest1/pages/signUp.dart';
 import 'package:firebasetest1/squaretile.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class SignUp extends StatefulWidget {
-  const SignUp({super.key});
+import 'forgotPasswordPage.dart';
+
+class LoginPage extends StatefulWidget {
+  final VoidCallback showRegisterPage;
+  LoginPage({super.key, required this.showRegisterPage});
 
   @override
-  State<SignUp> createState() => _SignUpState();
+  State<LoginPage> createState() => _LoginPageState();
 }
 
-class _SignUpState extends State<SignUp> {
+class _LoginPageState extends State<LoginPage> {
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
 
@@ -28,9 +31,34 @@ class _SignUpState extends State<SignUp> {
       },
     );
 
-    await FirebaseAuth.instance.createUserWithEmailAndPassword(
-        email: emailController.text, password: passwordController.text);
-    Navigator.pop(context);
+    //signin
+    try {
+      await FirebaseAuth.instance.signInWithEmailAndPassword(
+          email: emailController.text, password: passwordController.text);
+      Navigator.pop(context);
+    } on FirebaseAuthException catch (e) {
+      Navigator.pop(context);
+
+      if (e.code == 'user-not-found') {
+        showDialog(
+          context: context,
+          builder: (context) {
+            return AlertDialog(
+              title: Text('Wrong Email'),
+            );
+          },
+        );
+      } else if (e.code == 'wrong-password') {
+        showDialog(
+          context: context,
+          builder: (context) {
+            return AlertDialog(
+              title: Text('Wrong Password'),
+            );
+          },
+        );
+      }
+    }
   }
 
   @override
@@ -61,11 +89,11 @@ class _SignUpState extends State<SignUp> {
               ),
               //welcome back
               Text(
-                'Let\'s create your account.',
+                'Welcome back, you\'ve been missed!',
                 style: TextStyle(fontSize: 20),
               ),
               SizedBox(
-                height: 20,
+                height: 50,
               ),
 
               //text field 1
@@ -109,8 +137,25 @@ class _SignUpState extends State<SignUp> {
                   ),
                 ),
               ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                // ignore: prefer_const_literals_to_create_immutables
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 25.0, vertical: 10),
+                    child: GestureDetector(
+                      onTap:() {
+                        Navigator.push(context, MaterialPageRoute(builder: (context) => forgotPasswordPage() ,));
+                      }, 
+                        child: Text(
+                      'Forgot password?',
+                      style: GoogleFonts.lato(color: Colors.deepPurple),
+                    )),
+                  ),
+                ],
+              ),
               //button=>sign in
-              SizedBox(height: 10),
               GestureDetector(
                 onTap: signInUser,
                 child: Padding(
@@ -122,10 +167,10 @@ class _SignUpState extends State<SignUp> {
                     ),
                     child: Padding(
                       padding: const EdgeInsets.symmetric(
-                          horizontal: 100.0, vertical: 18),
+                          horizontal: 120.0, vertical: 18),
                       child: Text(
-                        'Create account',
-                        style: TextStyle(
+                        'Sign In',
+                        style: GoogleFonts.lato(
                             color: Colors.white,
                             fontSize: 15,
                             fontWeight: FontWeight.bold),
@@ -142,12 +187,13 @@ class _SignUpState extends State<SignUp> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 // ignore: prefer_const_literals_to_create_immutables
                 children: [
-                  Text('Already have an account? ',
-                      style: TextStyle(fontWeight: FontWeight.bold)),
+                  Text('Not a member? ',
+                      style: GoogleFonts.lato(fontWeight: FontWeight.bold)),
                   GestureDetector(
+                    onTap: widget.showRegisterPage,
                     child: Text(
-                      'Sign In',
-                      style: TextStyle(
+                      'Register now',
+                      style: GoogleFonts.lato(
                           color: Colors.deepPurple,
                           fontWeight: FontWeight.bold),
                     ),
@@ -167,7 +213,7 @@ class _SignUpState extends State<SignUp> {
                   Expanded(
                       child: Text(
                     ' Or continue with',
-                    style: TextStyle(color: Colors.grey[700]),
+                    style: GoogleFonts.lato(color: Colors.grey[700]),
                   )),
                   Expanded(
                       child: Divider(
