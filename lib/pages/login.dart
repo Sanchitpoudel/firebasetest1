@@ -17,6 +17,14 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  bool isPasswordHidden = true;
+
+  void passwordHidden() {
+    setState(() {
+      isPasswordHidden = !isPasswordHidden;
+    });
+  }
+
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
 
@@ -130,9 +138,19 @@ class _LoginPageState extends State<LoginPage> {
                     padding: const EdgeInsets.only(left: 20.0),
                     child: TextField(
                       controller: passwordController,
-                      obscureText: true,
+                      obscureText: isPasswordHidden,
                       decoration: InputDecoration(
-                          hintText: 'Password', border: InputBorder.none),
+                          suffixIcon: InkWell(
+                            onTap: passwordHidden,
+                            child: Icon(
+                              Icons.remove_red_eye,
+                              color: isPasswordHidden
+                                  ? Colors.grey
+                                  : Colors.deepPurple,
+                            ),
+                          ),
+                          hintText: 'Password',
+                          border: InputBorder.none),
                     ),
                   ),
                 ),
@@ -145,13 +163,17 @@ class _LoginPageState extends State<LoginPage> {
                     padding: const EdgeInsets.symmetric(
                         horizontal: 25.0, vertical: 10),
                     child: GestureDetector(
-                      onTap:() {
-                        Navigator.push(context, MaterialPageRoute(builder: (context) => forgotPasswordPage() ,));
-                      }, 
+                        onTap: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => forgotPasswordPage(),
+                              ));
+                        },
                         child: Text(
-                      'Forgot password?',
-                      style: GoogleFonts.lato(color: Colors.deepPurple),
-                    )),
+                          'Forgot password?',
+                          style: GoogleFonts.lato(color: Colors.deepPurple),
+                        )),
                   ),
                 ],
               ),

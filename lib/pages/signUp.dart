@@ -17,6 +17,20 @@ class SignUp extends StatefulWidget {
 }
 
 class _SignUpState extends State<SignUp> {
+  bool isPasswordHidden1 = true;
+
+  void passwordHidden1() {
+    setState(() {
+      isPasswordHidden1 = !isPasswordHidden1;
+    });
+  }
+ bool isPasswordHidden2 = true;
+
+  void passwordHidden2() {
+    setState(() {
+      isPasswordHidden2 = !isPasswordHidden2;
+    });
+  }
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   TextEditingController confirmPasswordController = TextEditingController();
@@ -63,12 +77,7 @@ class _SignUpState extends State<SignUp> {
             // ignore: prefer_const_literals_to_create_immutables
             children: [
               SizedBox(
-                height: 50,
-              ),
-              //icon
-              Icon(Icons.android, size: 100),
-              SizedBox(
-                height: 20,
+                height: 30,
               ),
               //hello again
               Text(
@@ -86,8 +95,30 @@ class _SignUpState extends State<SignUp> {
               SizedBox(
                 height: 20,
               ),
+              //Username field
 
-              //text field 1
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 25.0),
+                child: Container(
+                  decoration: BoxDecoration(
+                      color: Colors.grey[200],
+                      border: Border.all(color: Colors.white),
+                      borderRadius: BorderRadius.circular(12)),
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 20.0),
+                    child: TextField(
+                      controller: emailController,
+                      decoration: InputDecoration(
+                          hintText: 'UserName', border: InputBorder.none),
+                    ),
+                  ),
+                ),
+              ),
+              SizedBox(
+                height: 10,
+              ),
+
+              //email field
 
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 25.0),
@@ -106,10 +137,11 @@ class _SignUpState extends State<SignUp> {
                   ),
                 ),
               ),
-              //text field 2
               SizedBox(
                 height: 10,
               ),
+
+              //password
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 25.0),
                 child: Container(
@@ -121,9 +153,19 @@ class _SignUpState extends State<SignUp> {
                     padding: const EdgeInsets.only(left: 20.0),
                     child: TextField(
                       controller: passwordController,
-                      obscureText: true,
+                      obscureText: isPasswordHidden1,
                       decoration: InputDecoration(
-                          hintText: 'Password', border: InputBorder.none),
+                          suffixIcon: InkWell(
+                            onTap:passwordHidden1 ,
+                            child: Icon(
+                              Icons.remove_red_eye,
+                              color: isPasswordHidden1
+                                  ? Colors.grey
+                                  : Colors.deepPurple,
+                            ),
+                          ),
+                          hintText: 'Password',
+                          border: InputBorder.none),
                     ),
                   ),
                 ),
@@ -142,8 +184,17 @@ class _SignUpState extends State<SignUp> {
                     padding: const EdgeInsets.only(left: 20.0),
                     child: TextField(
                       controller: confirmPasswordController,
-                      obscureText: true,
+                      obscureText: isPasswordHidden2,
                       decoration: InputDecoration(
+                         suffixIcon: InkWell(
+                            onTap: passwordHidden2,
+                            child: Icon(
+                              Icons.remove_red_eye,
+                              color: isPasswordHidden2
+                                  ? Colors.grey
+                                  : Colors.deepPurple,
+                            ),
+                          ),
                           hintText: 'Confirm Password',
                           border: InputBorder.none),
                     ),
