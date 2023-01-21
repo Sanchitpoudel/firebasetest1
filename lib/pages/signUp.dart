@@ -1,5 +1,6 @@
 // ignore_for_file: prefer_const_constructors, use_build_context_synchronously
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebasetest1/pages/signUp.dart';
@@ -32,6 +33,13 @@ class _SignUpState extends State<SignUp> {
     if (passwordController.text == confirmPasswordController.text) {
       await FirebaseAuth.instance.createUserWithEmailAndPassword(
           email: emailController.text, password: passwordController.text);
+      CollectionReference users =
+          FirebaseFirestore.instance.collection('users');
+      users.add({
+        'full_name': 'fullName',
+        'company': 'company',
+        'age': 22 // 42
+      });
     }
     Navigator.pop(context);
   }
