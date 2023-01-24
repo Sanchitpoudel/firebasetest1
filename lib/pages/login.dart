@@ -2,6 +2,7 @@
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebasetest1/pages/signUp.dart';
+import 'package:firebasetest1/services/auth_services.dart';
 import 'package:firebasetest1/squaretile.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -250,7 +251,9 @@ class _LoginPageState extends State<LoginPage> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  SquareTile(imagePath: 'assets/google.png'),
+                  GestureDetector(
+                      onTap: () => AuthServices().signInWithGoogle(),
+                      child: SquareTile(imagePath: 'assets/google.png')),
                   SizedBox(
                     width: 10,
                   ),
